@@ -1,7 +1,4 @@
-/**
-* Template Name: MyResume - v4.10.0
-* Template URL: https://bootstrapmade.com/free-html-bootstrap-template-my-resume/
-*/
+
 (function() {
   "use strict";
 
