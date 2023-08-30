@@ -1,21 +1,26 @@
 <?php
-  $receiving_email_address = 'amalut9@gmail.com';
-
-  if( file_exists($php_email_form = '../assets/vendor/php-email-form/php-email-form.php' )) {
-    include( $php_email_form );
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      $receiving_email_address = 'amalut9@gmail.com';
+      
+      $sender_name = $_POST['name'];
+      $sender_email = $_POST['email'];
+      $subject = $_POST['subject'];
+      $message = $_POST['message'];
+      
+      $headers = "From: $sender_name <$sender_email>\r\n";
+      $headers .= "Reply-To: $sender_email\r\n";
+      
+      $mail_subject = "New Contact Form Submission: $subject";
+      $mail_body = "Name: $sender_name\n";
+      $mail_body .= "Email: $sender_email\n";
+      $mail_body .= "Subject: $subject\n";
+      $mail_body .= "Message:\n$message";
+      
+      if (mail($receiving_email_address, $mail_subject, $mail_body, $headers)) {
+          echo 'success';
+      } else {
+          echo 'error';
+      }
   } else {
-    die( 'Unable to load the "PHP Email Form" Library!');
-  }
-
-  $contact = new PHP_Email_Form;
-  $contact->ajax = true;
-  
-  $contact->to = $receiving_email_address;
-  $contact->from_name = $_POST['name'];
-  $contact->from_email = $_POST['email'];
-  $contact->subject = $_POST['subject'];
-  $contact->add_message( $_POST['name'], 'From');
-  $contact->add_message( $_POST['email'], 'Email');
-  $contact->add_message( $_POST['message'], 'Message', 10);
-  echo $contact->send();
-?>
+    echo 'Invalid request method.';
+}?>
